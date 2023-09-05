@@ -1,13 +1,17 @@
 import type { FC } from "react";
 import { BiMenu } from "react-icons/bi";
+import { BsFillMoonFill, BsFillSunFill } from "react-icons/bs";
 
-interface NavbarProps {}
+interface NavbarProps {
+	theme: string;
+	setTheme: () => void;
+}
 
-const Navbar: FC<NavbarProps> = () => {
+const Navbar: FC<NavbarProps> = ({ theme, setTheme }) => {
 	return (
-		<nav className="navbar bg-base-100">
+		<nav className="navbar bg-base-300">
 			<div className="flex-none">
-				<label htmlFor="my-drawer"  className="btn btn-square btn-ghost">
+				<label htmlFor="my-drawer" className="btn btn-square btn-ghost">
 					<BiMenu size={24} />
 				</label>
 			</div>
@@ -15,6 +19,9 @@ const Navbar: FC<NavbarProps> = () => {
 				<a className="btn btn-ghost normal-case text-xl">Welcome</a>
 			</div>
 
+			<div className="flex-none btn btn-sm" onClick={setTheme}>
+                {theme === "dark" ? <BsFillSunFill size={20} /> : <BsFillMoonFill size={20} />}
+			</div>
 			<div className="flex-none btn btn-ghost">
 				<img
 					className="aspect-square w-12 rounded-full"
