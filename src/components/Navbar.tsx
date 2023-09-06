@@ -19,7 +19,7 @@ const Navbar: FC<NavbarProps> = ({ theme, setTheme }) => {
 				<a className="btn btn-ghost normal-case text-xl">Welcome</a>
 			</div>
 
-			<div className="flex-none btn btn-sm" onClick={setTheme}>
+			<div className="flex-none btn btn-sm btn-ghost" onClick={setTheme}>
                 {theme === "dark" ? <BsFillSunFill size={20} /> : <BsFillMoonFill size={20} />}
 			</div>
 			<div className="flex-none btn btn-ghost">

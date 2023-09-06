@@ -6,7 +6,7 @@ interface DashBoardProps {}
 
 const DashBoard: FC<DashBoardProps> = () => {
 	return (
-		<main className="p-2 ">
+		<main className="p-2">
 			<Subheader />
 			{/* cards container */}
 			<div className="flex mt-3 gap-5 flex-col md:flex-row">

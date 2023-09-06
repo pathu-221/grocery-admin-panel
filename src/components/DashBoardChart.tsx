@@ -42,6 +42,7 @@ const DashboardChart: FC<DashboardChartProps> = () => {
 				className="max-w-full bg-base-300 mt-3 rounded-2xl p-3"
 				options={{
 					responsive: true,
+					borderColor: "rgb(255, 99, 132)",
 				}}
 				data={data}
 			/>
