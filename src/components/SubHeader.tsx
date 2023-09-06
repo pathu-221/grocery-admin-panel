@@ -7,7 +7,7 @@ interface SubheaderProps {
 
 const Subheader: FC<SubheaderProps> = ({ children }) => {
 	return (
-		<div className="min-w-screen rounded-full bg-base-300 m-2 px-5 py-2">
+		<div className="min-w-screen rounded-full bg-base-300 px-5 py-2">
 			<div className="text-sm breadcrumbs">
 				<ul>
 					<li>
