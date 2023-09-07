@@ -5,10 +5,11 @@ import { TbCategory2 } from "react-icons/tb";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineAdd } from "react-icons/md";
 import { BsPencil } from "react-icons/bs";
+import { FaCloudUploadAlt } from "react-icons/fa";
 
-interface CategoriesProps {}
+interface CategoriesPageProps {}
 
-const Categories: FC<CategoriesProps> = () => {
+const CategoriesPage: FC<CategoriesPageProps> = () => {
 	return (
 		<div className="drawer drawer-end">
 			<input id="categories-modal" type="checkbox" className="drawer-toggle" />
@@ -44,7 +45,7 @@ const Categories: FC<CategoriesProps> = () => {
 									<thead className="text-base">
 										<tr className="bg-base-100">
 											<th>Image</th>
-											<th>Picture</th>
+											<th>Name</th>
 											<th>Actions</th>
 										</tr>
 									</thead>
@@ -58,7 +59,10 @@ const Categories: FC<CategoriesProps> = () => {
 											</td>
 											<td>Fruits</td>
 											<td>
-												<label htmlFor="categories-modal" className="btn btn-square mr-2 btn-sm btn-primary">
+												<label
+													htmlFor="categories-modal"
+													className="btn btn-square mr-2 btn-sm btn-primary"
+												>
 													<BsPencil />
 												</label>
 												<button className="btn btn-square btn-sm btn-primary">
@@ -75,12 +79,40 @@ const Categories: FC<CategoriesProps> = () => {
 			</div>
 			<div className="drawer-side">
 				<label htmlFor="categories-modal" className="drawer-overlay"></label>
-				<section className="menu p-4 w-[450px] min-h-full bg-base-200 text-base-content">
-
+				<section className="menu p-4 w-[450px] min-h-full bg-base-200 text-base-content flex flex-col">
+					<div className="form-control w-full">
+						<label className="label">
+							<span className="label-text text-xl">Name: </span>
+						</label>
+						<input
+							type="text"
+							placeholder="Type here"
+							className="input input-bordered w-full"
+						/>
+					</div>
+					<label
+						htmlFor="fileInput"
+						className="bg-base-300 input-bordered mt-5 rounded-xl aspect-video w-full flex items-center justify-center cursor-pointer hover:bg-base-100"
+					>
+						<span className="flex flex-col items-center">
+							<FaCloudUploadAlt size={100} className="" />
+							<p className="text-lg">Upload Image</p>
+						</span>
+						<input
+							hidden
+							type="file"
+							id="fileInput"
+							accept="image/*"
+							className="w-full h-full"
+						/>
+					</label>
+					<span className="mt-auto justify-self-end">
+						<button className="btn-primary btn btn-block">Save</button>
+					</span>
 				</section>
 			</div>
 		</div>
 	);
 };
 
-export default Categories;
+export default CategoriesPage;
