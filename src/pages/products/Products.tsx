@@ -25,7 +25,7 @@ const ProductsPage: FC<ProductsPageProps> = () => {
 							Products
 						</span>
 						<span>
-							<Link to='/products/add'>
+							<Link to="/products/add">
 								<button className="btn btn-primary btn-sm rounded-full">
 									<MdOutlineAdd size={20} className="text-white" />
 									Add
@@ -63,9 +63,11 @@ const ProductsPage: FC<ProductsPageProps> = () => {
 										/>
 									</td>
 									<td>
-										<button className="btn btn-square mr-2 btn-sm btn-primary">
-											<BsPencil />
-										</button>
+										<Link to='/products/add'>
+											<button className="btn btn-square mr-2 btn-sm btn-primary">
+												<BsPencil />
+											</button>
+										</Link>
 										<button className="btn btn-square btn-sm btn-primary">
 											<RiDeleteBin6Line />
 										</button>
