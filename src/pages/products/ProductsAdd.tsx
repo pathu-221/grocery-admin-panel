@@ -1,6 +1,6 @@
 import { type FC, type ChangeEvent, useState, useEffect } from "react";
 import { FaBoxOpen } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Subheader from "../../components/SubHeader";
 import { useFormik } from "formik";
 import { ICategory } from "../../interfaces/category.interface";
@@ -9,13 +9,21 @@ import showToast from "../../components/ShowToast";
 import { object, string, array, number } from "yup";
 import { uploadImage } from "../../helpers/uploadImage.helper";
 import { getImageUrl } from "../../helpers/getFileUrl.helper";
-import { addProduct } from "../../apis/products.api";
+import {
+	addProduct,
+	editProduct,
+	fetchProductsbyId,
+} from "../../apis/products.api";
+import { IProduct } from "../../interfaces/product.interface";
 
 interface ProductAddPageProps {}
 
 const ProductAddPage: FC<ProductAddPageProps> = () => {
 	const [categories, setCategories] = useState<ICategory[]>();
 	const navigate = useNavigate();
+	const queryParams = new URLSearchParams(location.search);
+
+	const productId = queryParams.get("productId");
 
 	const proudctFormik = useFormik({
 		initialValues: {
@@ -41,7 +49,7 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 			categoryId: string().required("Category is required"),
 		}),
 		onSubmit: async (values) => {
-			console.log(values);
+			console.log(values)
 			const requestBody = {
 				name: values.name,
 				description: values.description,
@@ -50,7 +58,9 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 				quantity: values.quantity,
 				images: values.images,
 			};
-			const response = await addProduct(requestBody);
+			const response = productId
+				? await editProduct(requestBody, productId)
+				: await addProduct(requestBody);
 			if (!response.status) return showToast(response.msg);
 			showToast(response.msg, "success");
 			navigate("/products");
@@ -69,6 +79,23 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 		]);
 	};
 
+	const loadProduct = async () => {
+		if (!productId) return;
+
+		const response = await fetchProductsbyId(productId);
+		if (!response.status) showToast(response.msg);
+
+		const product = response.data as IProduct;
+		proudctFormik.setValues({
+			name: product.name,
+			description: product.description,
+			basePrice: product.base_price,
+			quantity: product.quantity,
+			images: JSON.parse(product.images),
+			categoryId: product.category_id,
+		});
+	};
+
 	const loadCategories = async () => {
 		const response = await fetchAllCategories();
 		if (!response || !response.status) return showToast(response.msg);
@@ -77,6 +104,7 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 
 	useEffect(() => {
 		loadCategories();
+		loadProduct();
 	}, []);
 
 	return (
@@ -108,6 +136,7 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 							</label>
 							<input
 								name="name"
+								value={proudctFormik.values.name}
 								onChange={proudctFormik.handleChange}
 								type="text"
 								placeholder="Enter product name"
@@ -126,6 +155,7 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 								</label>
 								<input
 									name="basePrice"
+									value={proudctFormik.values.basePrice}
 									onChange={proudctFormik.handleChange}
 									type="number"
 									className="input input-bordered"
@@ -142,6 +172,7 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 									<span className="label-text text-lg">Quantity</span>
 								</label>
 								<input
+									value={proudctFormik.values.quantity}
 									name="quantity"
 									onChange={proudctFormik.handleChange}
 									type="number"
@@ -159,6 +190,7 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 									<span className="label-text text-lg">Category</span>
 								</label>
 								<select
+									value={proudctFormik.values.categoryId}
 									name="categoryId"
 									onChange={proudctFormik.handleChange}
 									className="select select-bordered"
@@ -184,6 +216,7 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 								<span className="label-text text-lg">Description</span>
 							</label>
 							<textarea
+								value={proudctFormik.values.description}
 								name="description"
 								onChange={proudctFormik.handleChange}
 								rows={5}

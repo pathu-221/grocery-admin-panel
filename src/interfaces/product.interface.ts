@@ -9,6 +9,7 @@ export interface IProduct {
 	category_id: string;
 	category: { name: string; id: string };
 	images: string;
+	is_featured: boolean;
 	status: number;
 	created_at: string;
 	updated_at: string;

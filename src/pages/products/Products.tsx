@@ -5,7 +5,7 @@ import { MdOutlineAdd } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import Subheader from "../../components/SubHeader";
-import { fetchAllProducts } from "../../apis/products.api";
+import { deleteProduct, fetchAllProducts } from "../../apis/products.api";
 import showToast from "../../components/ShowToast";
 import { IProduct } from "../../interfaces/product.interface";
 import { getImageUrl } from "../../helpers/getFileUrl.helper";
@@ -22,6 +22,12 @@ const ProductsPage: FC<ProductsPageProps> = () => {
 		setProducts(response.data);
 	};
 
+	const productDelete = async (id: string) => {
+		const response = await deleteProduct(id);
+		if (!response.status) return showToast(response.msg);
+		showToast(response.msg, "success");
+		loadProducts();
+	};
 	useEffect(() => {
 		loadProducts();
 	}, []);
@@ -56,6 +62,7 @@ const ProductsPage: FC<ProductsPageProps> = () => {
 								<tr className="bg-base-100">
 									<th>Image</th>
 									<th>Name</th>
+									<th>Price</th>
 									<th>Category</th>
 									<th>Featured</th>
 									<th>Actions</th>
@@ -72,21 +79,25 @@ const ProductsPage: FC<ProductsPageProps> = () => {
 												/>
 											</td>
 											<td>{item.name}</td>
+											<td>₹{item.base_price}</td>
 											<td>{item.category.name}</td>
 											<td>
 												<input
 													type="checkbox"
 													className="toggle toggle-primary toggle-sm"
-													checked={true}
+													checked={item.is_featured}
 												/>
 											</td>
 											<td>
-												<Link to="/products/add">
+												<Link to={`/products/add/?productId=${item.id}`}>
 													<button className="btn btn-square mr-2 btn-sm btn-primary">
 														<BsPencil />
 													</button>
 												</Link>
-												<button className="btn btn-square btn-sm btn-primary">
+												<button
+													onClick={() => productDelete(item.id)}
+													className="btn btn-square btn-sm btn-primary"
+												>
 													<RiDeleteBin6Line />
 												</button>
 											</td>
