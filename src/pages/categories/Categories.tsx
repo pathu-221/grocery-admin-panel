@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import { type FC, useState, useEffect } from "react";
 import { BsPencil } from "react-icons/bs";
 import { MdOutlineAdd } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -6,10 +6,33 @@ import { TbCategory2 } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import Subheader from "../../components/SubHeader";
 import CategoriesAdd from "./CategoriesAdd";
+import { ICategory } from "../../interfaces/category.interface";
+import { deleteCategory, fetchAllCategories } from "../../apis/categories.api";
+import showToast from "../../components/ShowToast";
+import { getImageUrl } from "../../helpers/getFileUrl";
 
 interface CategoriesPageProps {}
 
 const CategoriesPage: FC<CategoriesPageProps> = () => {
+	const [category, setCategory] = useState<ICategory | undefined>();
+	const [categories, setCategories] = useState<ICategory[] | undefined>();
+
+	useEffect(() => {
+		loadCategories();
+	}, []);
+
+	const loadCategories = async () => {
+		const response = await fetchAllCategories();
+		if (!response || !response.status) return showToast(response.msg);
+		setCategories(response.data);
+	};
+
+	const categoryDelete = async (id: string) => {
+		const response = await deleteCategory(id);
+		if (!response || !response.status) return showToast(response.msg);
+		showToast(response.msg, "success");
+		loadCategories();
+	};
 	return (
 		<div className="drawer drawer-end">
 			<input id="categories-modal" type="checkbox" className="drawer-toggle" />
@@ -31,6 +54,7 @@ const CategoriesPage: FC<CategoriesPageProps> = () => {
 								</span>
 								<span>
 									<label
+										onClick={() => setCategory(undefined)}
 										htmlFor="categories-modal"
 										className="btn btn-primary btn-sm rounded-full"
 									>
@@ -50,26 +74,33 @@ const CategoriesPage: FC<CategoriesPageProps> = () => {
 										</tr>
 									</thead>
 									<tbody className="text-center">
-										<tr>
-											<td>
-												<img
-													src="https://images.unsplash.com/photo-1559181567-c3190ca9959b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1964&q=80"
-													className="w-20 aspect-square mx-auto"
-												/>
-											</td>
-											<td>Fruits</td>
-											<td>
-												<label
-													htmlFor="categories-modal"
-													className="btn btn-square mr-2 btn-sm btn-primary"
-												>
-													<BsPencil />
-												</label>
-												<button className="btn btn-square btn-sm btn-primary">
-													<RiDeleteBin6Line />
-												</button>
-											</td>
-										</tr>
+										{categories &&
+											categories.map((item) => (
+												<tr>
+													<td>
+														<img
+															src={getImageUrl(item.image)}
+															className="w-20 aspect-square mx-auto"
+														/>
+													</td>
+													<td>{item.name}</td>
+													<td>
+														<label
+															onClick={() => setCategory(item)}
+															htmlFor="categories-modal"
+															className="btn btn-square mr-2 btn-sm btn-primary"
+														>
+															<BsPencil />
+														</label>
+														<button
+															onClick={() => categoryDelete(item.id)}
+															className="btn btn-square btn-sm btn-primary"
+														>
+															<RiDeleteBin6Line />
+														</button>
+													</td>
+												</tr>
+											))}
 									</tbody>
 								</table>
 							</div>
@@ -79,7 +110,11 @@ const CategoriesPage: FC<CategoriesPageProps> = () => {
 			</div>
 			<div className="drawer-side">
 				<label htmlFor="categories-modal" className="drawer-overlay"></label>
-				<CategoriesAdd />
+				<CategoriesAdd
+					onUpdate={() => loadCategories()}
+					category={category}
+					key={`${category?.name}`}
+				/>
 			</div>
 		</div>
 	);

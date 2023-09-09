@@ -3,6 +3,9 @@ import { requestWithToken, requestWithoutToken } from "../helpers/http.helpers";
 export async function login(formData: any) {
 	const data = await requestWithoutToken("auth/login", {
 		method: "POST",
+		headers: {
+			"content-type": "application/json",
+		},
 		body: JSON.stringify(formData),
 	});
 	return data;

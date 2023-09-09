@@ -29,7 +29,13 @@ function App() {
 		setUser(response.data.user);
 	};
 
-	if (location.pathname == "/login") return <Login />;
+	if (location.pathname == "/login")
+		return (
+			<>
+				<Toaster position="top-right" reverseOrder={false} />
+				<Login />
+			</>
+		);
 	return (
 		<div data-theme={theme} className="min-h-screen">
 			<Toaster position="top-right" reverseOrder={false} />

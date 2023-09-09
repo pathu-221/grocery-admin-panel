@@ -25,7 +25,7 @@ const Login: FC<LoginProps> = () => {
 		}),
 		onSubmit: async (values) => {
 			const response = await login(values);
-			if (!response || !response.status) return showToast(response.msg);
+			if (!response.status) return showToast(response.msg);
 			const user = {
 				...response.data.user,
 			};
