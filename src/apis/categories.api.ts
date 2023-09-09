@@ -1,4 +1,4 @@
-import { requestWithToken } from "../helpers/http.helpers";
+import { requestWithToken } from "../helpers/http.helper";
 
 export async function fetchAllCategories() {
 	const response = await requestWithToken("admin/categories", {

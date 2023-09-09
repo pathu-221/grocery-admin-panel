@@ -1,4 +1,4 @@
-import { requestWithToken, requestWithoutToken } from "../helpers/http.helpers";
+import { requestWithToken, requestWithoutToken } from "../helpers/http.helper";
 
 export async function login(formData: any) {
 	const data = await requestWithoutToken("auth/login", {

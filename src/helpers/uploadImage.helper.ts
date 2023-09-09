@@ -1,4 +1,4 @@
-import { requestWithToken } from "./http.helpers";
+import { requestWithToken } from "./http.helper";
 
 export async function uploadImage(file: File) {
 	const formData = new FormData();

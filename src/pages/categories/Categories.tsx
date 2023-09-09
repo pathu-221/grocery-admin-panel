@@ -9,7 +9,7 @@ import CategoriesAdd from "./CategoriesAdd";
 import { ICategory } from "../../interfaces/category.interface";
 import { deleteCategory, fetchAllCategories } from "../../apis/categories.api";
 import showToast from "../../components/ShowToast";
-import { getImageUrl } from "../../helpers/getFileUrl";
+import { getImageUrl } from "../../helpers/getFileUrl.helper";
 
 interface CategoriesPageProps {}
 

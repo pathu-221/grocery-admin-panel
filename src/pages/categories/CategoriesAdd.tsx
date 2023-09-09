@@ -3,9 +3,9 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import { ICategory } from "../../interfaces/category.interface";
 import { useFormik } from "formik";
 import { object, string } from "yup";
-import { uploadImage } from "../../helpers/uploadImage";
+import { uploadImage } from "../../helpers/uploadImage.helper";
 import showToast from "../../components/ShowToast";
-import { getImageUrl } from "../../helpers/getFileUrl";
+import { getImageUrl } from "../../helpers/getFileUrl.helper";
 import { addCategory } from "../../apis/categories.api";
 
 interface CategoriesAddProps {
@@ -33,7 +33,6 @@ const CategoriesAdd: FC<CategoriesAddProps> = ({ category, onUpdate }) => {
 	});
 
 	const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
-		console.log(!e.target.files);
 		if (!e.target.files) return;
 
 		const response = await uploadImage(e.target.files[0]);

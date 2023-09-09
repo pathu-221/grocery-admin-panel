@@ -7,7 +7,7 @@ import SideDrawer from "./components/SideDrawer";
 import { AuthProvider, authContext } from "./contexts/authContext";
 import CategoriesPage from "./pages/categories/Categories";
 import DashBoard from "./pages/DashBoard";
-import Login from "./pages/login";
+import Login from "./pages/Login";
 import ProductsPage from "./pages/products/Products";
 import ProductAddPage from "./pages/products/ProductsAdd";
 

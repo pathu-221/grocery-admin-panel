@@ -1,14 +1,30 @@
-import type { FC } from "react";
+import { type FC, useState, useEffect } from "react";
 import { BsPencil } from "react-icons/bs";
 import { FaBoxOpen } from "react-icons/fa";
 import { MdOutlineAdd } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import Subheader from "../../components/SubHeader";
+import { fetchAllProducts } from "../../apis/products.api";
+import showToast from "../../components/ShowToast";
+import { IProduct } from "../../interfaces/product.interface";
+import { getImageUrl } from "../../helpers/getFileUrl.helper";
+import { parseJSONdata } from "../../helpers/json.helper";
 
 interface ProductsPageProps {}
 
 const ProductsPage: FC<ProductsPageProps> = () => {
+	const [products, setProducts] = useState<IProduct[]>();
+
+	const loadProducts = async () => {
+		const response = await fetchAllProducts();
+		if (!response.status) return showToast(response.msg);
+		setProducts(response.data);
+	};
+
+	useEffect(() => {
+		loadProducts();
+	}, []);
 	return (
 		<main className="p-2">
 			<Subheader>
@@ -46,33 +62,36 @@ const ProductsPage: FC<ProductsPageProps> = () => {
 								</tr>
 							</thead>
 							<tbody className="text-center">
-								<tr>
-									<td>
-										<img
-											src="https://images.unsplash.com/photo-1559181567-c3190ca9959b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1964&q=80"
-											className="w-20 aspect-square mx-auto"
-										/>
-									</td>
-									<td>Fruits</td>
-									<td></td>
-									<td>
-										<input
-											type="checkbox"
-											className="toggle toggle-primary toggle-sm"
-											checked
-										/>
-									</td>
-									<td>
-										<Link to='/products/add'>
-											<button className="btn btn-square mr-2 btn-sm btn-primary">
-												<BsPencil />
-											</button>
-										</Link>
-										<button className="btn btn-square btn-sm btn-primary">
-											<RiDeleteBin6Line />
-										</button>
-									</td>
-								</tr>
+								{products &&
+									products.map((item) => (
+										<tr>
+											<td>
+												<img
+													src={getImageUrl(parseJSONdata(item.images)[0])}
+													className="w-20 aspect-square mx-auto"
+												/>
+											</td>
+											<td>{item.name}</td>
+											<td>{item.category.name}</td>
+											<td>
+												<input
+													type="checkbox"
+													className="toggle toggle-primary toggle-sm"
+													checked={true}
+												/>
+											</td>
+											<td>
+												<Link to="/products/add">
+													<button className="btn btn-square mr-2 btn-sm btn-primary">
+														<BsPencil />
+													</button>
+												</Link>
+												<button className="btn btn-square btn-sm btn-primary">
+													<RiDeleteBin6Line />
+												</button>
+											</td>
+										</tr>
+									))}
 							</tbody>
 						</table>
 					</div>
