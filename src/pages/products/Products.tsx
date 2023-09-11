@@ -5,7 +5,11 @@ import { MdOutlineAdd } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import Subheader from "../../components/SubHeader";
-import { deleteProduct, fetchAllProducts } from "../../apis/products.api";
+import {
+	deleteProduct,
+	editProduct,
+	fetchAllProducts,
+} from "../../apis/products.api";
 import showToast from "../../components/ShowToast";
 import { IProduct } from "../../interfaces/product.interface";
 import { getImageUrl } from "../../helpers/getFileUrl.helper";
@@ -22,6 +26,13 @@ const ProductsPage: FC<ProductsPageProps> = () => {
 		setProducts(response.data);
 	};
 
+	const updatProductFeatured = async (value: boolean, id: string) => {
+		const response = await editProduct({ is_featured: value }, id);
+		console.log({ response, value });
+		if (!response.status) return showToast(response.msg, "error");
+
+		loadProducts();
+	};
 	const productDelete = async (id: string) => {
 		const response = await deleteProduct(id);
 		if (!response.status) return showToast(response.msg);
@@ -83,6 +94,9 @@ const ProductsPage: FC<ProductsPageProps> = () => {
 											<td>{item.category.name}</td>
 											<td>
 												<input
+													onChange={() =>
+														updatProductFeatured(!item.is_featured, item.id)
+													}
 													type="checkbox"
 													className="toggle toggle-primary toggle-sm"
 													checked={item.is_featured}

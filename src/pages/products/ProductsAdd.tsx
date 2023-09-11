@@ -1,6 +1,6 @@
 import { type FC, type ChangeEvent, useState, useEffect } from "react";
 import { FaBoxOpen } from "react-icons/fa";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Subheader from "../../components/SubHeader";
 import { useFormik } from "formik";
 import { ICategory } from "../../interfaces/category.interface";
@@ -15,6 +15,7 @@ import {
 	fetchProductsbyId,
 } from "../../apis/products.api";
 import { IProduct } from "../../interfaces/product.interface";
+import { VscChromeClose } from "react-icons/vsc";
 
 interface ProductAddPageProps {}
 
@@ -25,7 +26,7 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 
 	const productId = queryParams.get("productId");
 
-	const proudctFormik = useFormik({
+	const productFormik = useFormik({
 		initialValues: {
 			name: "",
 			description: "",
@@ -49,7 +50,7 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 			categoryId: string().required("Category is required"),
 		}),
 		onSubmit: async (values) => {
-			console.log(values)
+			console.log(values);
 			const requestBody = {
 				name: values.name,
 				description: values.description,
@@ -73,8 +74,8 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 		const response = await uploadImage(e.target.files[0]);
 		if (!response.status) return showToast(response.msg);
 
-		proudctFormik.setFieldValue("images", [
-			...proudctFormik.values.images,
+		productFormik.setFieldValue("images", [
+			...productFormik.values.images,
 			response.data,
 		]);
 	};
@@ -86,7 +87,7 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 		if (!response.status) showToast(response.msg);
 
 		const product = response.data as IProduct;
-		proudctFormik.setValues({
+		productFormik.setValues({
 			name: product.name,
 			description: product.description,
 			basePrice: product.base_price,
@@ -100,6 +101,13 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 		const response = await fetchAllCategories();
 		if (!response || !response.status) return showToast(response.msg);
 		setCategories(response.data);
+	};
+
+	const handleImageRemove = (image: string) => {
+		let images = productFormik.values.images;
+		images = images.filter((i) => i !== image);
+
+		productFormik.setValues({ ...productFormik.values, images: images });
 	};
 
 	useEffect(() => {
@@ -119,7 +127,7 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 			</Subheader>
 			{/* main content */}
 			<form
-				onSubmit={proudctFormik.handleSubmit}
+				onSubmit={productFormik.handleSubmit}
 				className="card w-full bg-base-300 mt-2"
 			>
 				<div className="card-body p-6">
@@ -136,15 +144,15 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 							</label>
 							<input
 								name="name"
-								value={proudctFormik.values.name}
-								onChange={proudctFormik.handleChange}
+								value={productFormik.values.name}
+								onChange={productFormik.handleChange}
 								type="text"
 								placeholder="Enter product name"
 								className="input input-bordered"
 							/>
-							{proudctFormik.errors.name && proudctFormik.touched.name && (
+							{productFormik.errors.name && productFormik.touched.name && (
 								<label className="label label-text-alt text-error">
-									{proudctFormik.errors.name}
+									{productFormik.errors.name}
 								</label>
 							)}
 						</div>
@@ -155,15 +163,15 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 								</label>
 								<input
 									name="basePrice"
-									value={proudctFormik.values.basePrice}
-									onChange={proudctFormik.handleChange}
+									value={productFormik.values.basePrice}
+									onChange={productFormik.handleChange}
 									type="number"
 									className="input input-bordered"
 								/>
-								{proudctFormik.errors.basePrice &&
-									proudctFormik.touched.basePrice && (
+								{productFormik.errors.basePrice &&
+									productFormik.touched.basePrice && (
 										<label className="label label-text-alt text-error">
-											{proudctFormik.errors.basePrice}
+											{productFormik.errors.basePrice}
 										</label>
 									)}
 							</div>
@@ -172,16 +180,16 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 									<span className="label-text text-lg">Quantity</span>
 								</label>
 								<input
-									value={proudctFormik.values.quantity}
+									value={productFormik.values.quantity}
 									name="quantity"
-									onChange={proudctFormik.handleChange}
+									onChange={productFormik.handleChange}
 									type="number"
 									className="input input-bordered"
 								/>
-								{proudctFormik.errors.quantity &&
-									proudctFormik.touched.quantity && (
+								{productFormik.errors.quantity &&
+									productFormik.touched.quantity && (
 										<label className="label label-text-alt text-error">
-											{proudctFormik.errors.quantity}
+											{productFormik.errors.quantity}
 										</label>
 									)}
 							</div>
@@ -190,9 +198,9 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 									<span className="label-text text-lg">Category</span>
 								</label>
 								<select
-									value={proudctFormik.values.categoryId}
+									value={productFormik.values.categoryId}
 									name="categoryId"
-									onChange={proudctFormik.handleChange}
+									onChange={productFormik.handleChange}
 									className="select select-bordered"
 								>
 									<option disabled selected={true}>
@@ -203,10 +211,10 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 											<option value={item.id}>{item.name}</option>
 										))}
 								</select>
-								{proudctFormik.errors.categoryId &&
-									proudctFormik.touched.categoryId && (
+								{productFormik.errors.categoryId &&
+									productFormik.touched.categoryId && (
 										<label className="label label-text-alt text-error">
-											{proudctFormik.errors.categoryId}
+											{productFormik.errors.categoryId}
 										</label>
 									)}
 							</div>
@@ -216,17 +224,17 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 								<span className="label-text text-lg">Description</span>
 							</label>
 							<textarea
-								value={proudctFormik.values.description}
+								value={productFormik.values.description}
 								name="description"
-								onChange={proudctFormik.handleChange}
+								onChange={productFormik.handleChange}
 								rows={5}
 								placeholder="Enter product description"
 								className="textarea textarea-bordered"
 							/>
-							{proudctFormik.errors.description &&
-								proudctFormik.touched.description && (
+							{productFormik.errors.description &&
+								productFormik.touched.description && (
 									<label className="label label-text-alt text-error">
-										{proudctFormik.errors.description}
+										{productFormik.errors.description}
 									</label>
 								)}
 						</div>
@@ -234,15 +242,23 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 							<label className="label">
 								<span className="label-text text-lg">Images</span>
 							</label>
-							{proudctFormik.values.images &&
-								proudctFormik.values.images.length > 0 && (
+							{productFormik.values.images &&
+								productFormik.values.images.length > 0 && (
 									<div className="mb-3 flex gap-3 flex-wrap">
-										{proudctFormik.values.images.map((image, index) => (
-											<img
-												src={getImageUrl(image)}
-												alt={`Image ${index}`}
-												className="object-cover w-20 aspect-square rounded-xl"
-											/>
+										{productFormik.values.images.map((image, index) => (
+											<div className="indicator">
+												<span
+													onClick={() => handleImageRemove(image)}
+													className="indicator-item badge badge-secondary badge-lg p-1 cursor-pointer"
+												>
+													<VscChromeClose />
+												</span>
+												<img
+													src={getImageUrl(image)}
+													alt={`Image ${index}`}
+													className="object-cover w-20 aspect-square rounded-xl"
+												/>
+											</div>
 										))}
 									</div>
 								)}
@@ -252,9 +268,9 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 								type="file"
 								className="file-input file-input-bordered"
 							/>
-							{proudctFormik.errors.images && proudctFormik.touched.images && (
+							{productFormik.errors.images && productFormik.touched.images && (
 								<label className="label label-text-alt text-error">
-									{proudctFormik.errors.images}
+									{productFormik.errors.images}
 								</label>
 							)}
 						</div>
