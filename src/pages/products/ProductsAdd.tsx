@@ -105,7 +105,7 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 
 	const handleImageRemove = (image: string) => {
 		let images = productFormik.values.images;
-		images = images.filter((i) => i !== image);
+		images =  images.filter((i) => i !== image);
 
 		productFormik.setValues({ ...productFormik.values, images: images });
 	};
