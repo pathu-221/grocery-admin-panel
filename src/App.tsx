@@ -25,7 +25,6 @@ function App() {
 	const authenticateUser = async () => {
 		const response = await authenticate();
 		if (!response || !response.status) return navigate("/login");
-		delete response.data.user.password;
 		setUser(response.data.user);
 	};
 

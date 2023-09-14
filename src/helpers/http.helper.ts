@@ -2,7 +2,7 @@ export const BASE_URL = import.meta.env.VITE_API_URL;
 
 export async function requestWithoutToken(
 	endpoint: string,
-	options: RequestInit
+	options?: RequestInit
 ) {
 	try {
 		const response = await fetch(`${BASE_URL}/${endpoint}`, options);
@@ -13,14 +13,17 @@ export async function requestWithoutToken(
 	}
 }
 
-export async function requestWithToken(endpoint: string, options: RequestInit) {
+export async function requestWithToken(
+	endpoint: string,
+	options?: RequestInit
+) {
 	const token = localStorage.getItem("token");
 	try {
 		const response = await fetch(`${BASE_URL}/${endpoint}`, {
 			...options,
 			headers: {
 				authorization: `Bearer ${token}`,
-				...options.headers,
+				...options?.headers,
 			},
 		});
 		const data = await response.json();

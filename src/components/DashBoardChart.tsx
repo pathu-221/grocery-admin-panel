@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import { type FC, useEffect, useState } from "react";
 import {
 	Chart as ChartJS,
 	CategoryScale,
@@ -11,7 +11,9 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 
-interface DashboardChartProps {}
+interface DashboardChartProps {
+	chartData: { [key: string]: number };
+}
 
 ChartJS.register(
 	CategoryScale,
@@ -35,7 +37,12 @@ export const data = {
 	],
 };
 
-const DashboardChart: FC<DashboardChartProps> = () => {
+const DashboardChart: FC<DashboardChartProps> = ({ chartData }) => {
+	useEffect(() => {
+		const labels = Object.keys(chartData);
+		const data = labels.map((key) => chartData[key]);
+		console.log({ labels, data });
+	}, []);
 	return (
 		<div className="w-full">
 			<Line
@@ -44,7 +51,15 @@ const DashboardChart: FC<DashboardChartProps> = () => {
 					responsive: true,
 					borderColor: "rgb(255, 99, 132)",
 				}}
-				data={data}
+				data={{
+					labels: Object.keys(chartData),
+					datasets: [
+						{
+							label: "Orders",
+							data: Object.keys(chartData).map((key) => chartData[key]),
+						},
+					],
+				}}
 			/>
 		</div>
 	);
