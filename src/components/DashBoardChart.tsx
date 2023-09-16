@@ -38,11 +38,8 @@ export const data = {
 };
 
 const DashboardChart: FC<DashboardChartProps> = ({ chartData }) => {
-	useEffect(() => {
-		const labels = Object.keys(chartData);
-		const data = labels.map((key) => chartData[key]);
-		console.log({ labels, data });
-	}, []);
+	useEffect(() => { }, []);
+	
 	return (
 		<div className="w-full">
 			<Line
@@ -50,6 +47,9 @@ const DashboardChart: FC<DashboardChartProps> = ({ chartData }) => {
 				options={{
 					responsive: true,
 					borderColor: "rgb(255, 99, 132)",
+					scales: {
+						y: { beginAtZero: true },
+					},
 				}}
 				data={{
 					labels: Object.keys(chartData),

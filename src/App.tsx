@@ -10,6 +10,7 @@ import DashBoard from "./pages/DashBoard";
 import Login from "./pages/Login";
 import ProductsPage from "./pages/products/Products";
 import ProductAddPage from "./pages/products/ProductsAdd";
+import OrdersPage from "./pages/orders/Orders";
 
 function App() {
 	const navigate = useNavigate();
@@ -49,6 +50,7 @@ function App() {
 						<Route path="/categories" element={<CategoriesPage />} />
 						<Route path="/products" element={<ProductsPage />} />
 						<Route path="/products/add" element={<ProductAddPage />} />
+						<Route path="/orders" element={<OrdersPage />} />
 					</Routes>
 				</SideDrawer>
 			</AuthProvider>

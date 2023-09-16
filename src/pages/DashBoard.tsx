@@ -32,7 +32,7 @@ const DashBoard: FC<DashBoardProps> = () => {
 							<div className="card-body p-6">
 								<h2 className="card-title text-2xl font-semibold">Sales</h2>
 								<p className="text-4xl font-bold">
-									${dashBoard?.totalSales.toLocaleString()}
+									${dashBoard.totalSales.toLocaleString()}
 								</p>
 							</div>
 						</div>
@@ -40,7 +40,7 @@ const DashBoard: FC<DashBoardProps> = () => {
 							<div className="card-body p-6">
 								<h2 className="card-title text-2xl font-semibold">Orders</h2>
 								<p className="text-4xl font-bold">
-									{dashBoard?.totalOrders.toLocaleString()}
+									{dashBoard.totalOrders.toLocaleString()}
 								</p>
 							</div>
 						</div>
@@ -50,14 +50,12 @@ const DashBoard: FC<DashBoardProps> = () => {
 									Average reviews
 								</h2>
 								<p className="text-4xl font-bold">
-									{dashBoard?.averageReviews.toLocaleString()}⭐
+									{dashBoard.averageReviews.toLocaleString()}⭐
 								</p>
 							</div>
 						</div>
 					</div>
-					<DashboardChart
-						chartData={dashBoard?.ordersByMonth || { January: 0 }}
-					/>
+					<DashboardChart chartData={dashBoard.ordersByMonth } />
 				</>
 			)}
 		</main>

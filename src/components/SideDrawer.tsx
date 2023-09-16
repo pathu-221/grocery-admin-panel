@@ -2,8 +2,8 @@ import type { FC } from "react";
 import { Link } from "react-router-dom";
 import { MdDashboard } from "react-icons/md";
 import { TbCategory2 } from "react-icons/tb";
-import { FaBoxOpen } from 'react-icons/fa';
-
+import { FaBoxOpen } from "react-icons/fa";
+import { BsCartCheckFill } from "react-icons/bs";
 
 interface SideDrawerProps {
 	children: React.ReactNode;
@@ -39,6 +39,14 @@ const SideDrawer: FC<SideDrawerProps> = ({ children }) => {
 					>
 						<span className="flex items-center justify-start gap-3">
 							<FaBoxOpen /> Products
+						</span>
+					</Link>
+					<Link
+						to="/orders"
+						className="collapse-title text-lg font-medium hover:bg-base-300 dropdown-content rounded-md"
+					>
+						<span className="flex items-center justify-start gap-3">
+							<BsCartCheckFill /> Orders
 						</span>
 					</Link>
 				</ul>
