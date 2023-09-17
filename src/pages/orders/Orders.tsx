@@ -1,11 +1,13 @@
-import { useEffect, type FC, useState } from "react";
+import { useEffect, type FC, type ChangeEvent, useState } from "react";
 import Subheader from "../../components/SubHeader";
 import { Link } from "react-router-dom";
 import { BsCartCheckFill } from "react-icons/bs";
-import { fetchAllOrders } from "../../apis/order.api";
+import { fetchAllOrders, updateOrder } from "../../apis/order.api";
 import showToast from "../../components/ShowToast";
 import { IOrder } from "../../interfaces/order.interface";
 import { getFormattedDate } from "../../helpers/json.helper";
+import { BiSolidDetail } from "react-icons/bi";
+import { orderStatus } from "../../enums/order-status.enum";
 
 interface OrdersPageProps {}
 
@@ -20,6 +22,16 @@ const OrdersPage: FC<OrdersPageProps> = () => {
 		if (!response.status) return showToast(response.msg);
 
 		setOrders(response.data);
+	};
+
+	const updateOrderStatus = async (
+		id: string,
+		e: ChangeEvent<HTMLSelectElement>
+	) => {
+		//console.log({ status });
+		const response = await updateOrder(id, { status: e.target.value });
+		if (!response.status) return showToast(response.msg);
+		showToast(response.msg, "success");
 	};
 	return (
 		<main className="p-2">
@@ -42,7 +54,7 @@ const OrdersPage: FC<OrdersPageProps> = () => {
 							<thead className="text-base">
 								<tr className="bg-base-100">
 									<th>Sr No.</th>
-									<th>Order data</th>
+									<th>Order date</th>
 									<th>Total Items</th>
 									<th>Grand total</th>
 									<th>Payment status</th>
@@ -56,8 +68,8 @@ const OrdersPage: FC<OrdersPageProps> = () => {
 									orders.map((item, index) => (
 										<tr key={item.id}>
 											<td>{index + 1}</td>
-											<td>{item.total_items}</td>
 											<td>{getFormattedDate(item.created_at)}</td>
+											<td>{item.total_items}</td>
 											<td>₹{item.grand_total}</td>
 											<td>{item.payment_status}</td>
 											<td>
@@ -71,7 +83,32 @@ const OrdersPage: FC<OrdersPageProps> = () => {
 												{item.shipping_state} <br />
 												{`${item.shipping_city}-${item.shipping_zip}`} <br />
 											</td>
-											<td>{item.status}</td>
+											<td>
+												<select
+													onChange={(e) => updateOrderStatus(item.id, e)}
+													defaultValue={item.status}
+													className="select select-bordered select-sm w-full max-w-xs"
+												>
+													<option disabled selected>
+														--select--
+													</option>
+													{Object.values(orderStatus).map((status) => (
+														<option key={status} value={status}>
+															{status}
+														</option>
+													))}
+												</select>
+											</td>
+											<td>
+												<div data-tip="View details" className="tooltip">
+													<Link
+														to={`/orders/order-detail/?orderId=${item.id}`}
+														className="btn btn-square btn-sm btn-primary"
+													>
+														<BiSolidDetail />
+													</Link>
+												</div>
+											</td>
 										</tr>
 									))}
 							</tbody>

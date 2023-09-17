@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import ProductsPage from "./pages/products/Products";
 import ProductAddPage from "./pages/products/ProductsAdd";
 import OrdersPage from "./pages/orders/Orders";
+import OrderDetailPage from "./pages/orders/OrderDetail";
 
 function App() {
 	const navigate = useNavigate();
@@ -51,6 +52,7 @@ function App() {
 						<Route path="/products" element={<ProductsPage />} />
 						<Route path="/products/add" element={<ProductAddPage />} />
 						<Route path="/orders" element={<OrdersPage />} />
+						<Route path="/orders/order-detail" element={<OrderDetailPage />} />
 					</Routes>
 				</SideDrawer>
 			</AuthProvider>

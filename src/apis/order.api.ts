@@ -5,9 +5,14 @@ export async function fetchAllOrders() {
 	return data;
 }
 
-export async function updateOrder(formData: any) {
-	const data = await requestWithToken("admin/orders", {
-		method: "POST",
+export async function fetchOrderById(id: string) {
+	const data = await requestWithToken(`admin/orders/${id}`);
+	return data;
+}
+
+export async function updateOrder(orderId: string, formData: any) {
+	const data = await requestWithToken(`admin/orders/${orderId}`, {
+		method: "PUT",
 		headers: {
 			"content-type": "application/json",
 		},
