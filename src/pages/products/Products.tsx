@@ -27,7 +27,6 @@ const ProductsPage: FC<ProductsPageProps> = () => {
 
 	const updatProductFeatured = async (value: boolean, id: string) => {
 		const response = await editProduct({ is_featured: value }, id);
-		console.log({ response, value });
 		if (!response.status) return showToast(response.msg, "error");
 
 		loadProducts();

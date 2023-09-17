@@ -14,7 +14,6 @@ interface CategoriesAddProps {
 }
 
 const CategoriesAdd: FC<CategoriesAddProps> = ({ category, onUpdate }) => {
-	console.log({ category });
 	const categoryFormik = useFormik({
 		initialValues: {
 			name: category?.name || "",

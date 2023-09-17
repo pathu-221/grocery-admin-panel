@@ -5,7 +5,13 @@ export async function requestWithoutToken(
 	options?: RequestInit
 ) {
 	try {
-		const response = await fetch(`${BASE_URL}/${endpoint}`, options);
+		const response = await fetch(`${BASE_URL}/${endpoint}`, {
+			...options,
+			headers: {
+				role: "admin",
+				...options?.headers,
+			},
+		});
 		const data = await response.json();
 		return data;
 	} catch (error) {
@@ -23,6 +29,7 @@ export async function requestWithToken(
 			...options,
 			headers: {
 				authorization: `Bearer ${token}`,
+				role: "admin",
 				...options?.headers,
 			},
 		});

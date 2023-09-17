@@ -50,7 +50,6 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 			categoryId: string().required("Category is required"),
 		}),
 		onSubmit: async (values) => {
-			console.log(values);
 			const requestBody = {
 				name: values.name,
 				description: values.description,
@@ -105,7 +104,7 @@ const ProductAddPage: FC<ProductAddPageProps> = () => {
 
 	const handleImageRemove = (image: string) => {
 		let images = productFormik.values.images;
-		images =  images.filter((i) => i !== image);
+		images = images.filter((i) => i !== image);
 
 		productFormik.setValues({ ...productFormik.values, images: images });
 	};
