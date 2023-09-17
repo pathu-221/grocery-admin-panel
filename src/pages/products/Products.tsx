@@ -13,7 +13,6 @@ import {
 import showToast from "../../components/ShowToast";
 import { IProduct } from "../../interfaces/product.interface";
 import { getImageUrl } from "../../helpers/getFileUrl.helper";
-import { parseJSONdata } from "../../helpers/json.helper";
 
 interface ProductsPageProps {}
 
@@ -85,7 +84,7 @@ const ProductsPage: FC<ProductsPageProps> = () => {
 										<tr>
 											<td>
 												<img
-													src={getImageUrl(parseJSONdata(item.images)[0])}
+													src={getImageUrl(JSON.parse(item.images)[0])}
 													className="w-20 aspect-square mx-auto"
 												/>
 											</td>

@@ -5,7 +5,7 @@ import { BsCartCheckFill } from "react-icons/bs";
 import { fetchAllOrders, updateOrder } from "../../apis/order.api";
 import showToast from "../../components/ShowToast";
 import { IOrder } from "../../interfaces/order.interface";
-import { getFormattedDate } from "../../helpers/json.helper";
+import { getFormattedDate } from "../../helpers/date.helper";
 import { BiSolidDetail } from "react-icons/bi";
 import { orderStatus } from "../../enums/order-status.enum";
 
@@ -28,7 +28,6 @@ const OrdersPage: FC<OrdersPageProps> = () => {
 		id: string,
 		e: ChangeEvent<HTMLSelectElement>
 	) => {
-		//console.log({ status });
 		const response = await updateOrder(id, { status: e.target.value });
 		if (!response.status) return showToast(response.msg);
 		showToast(response.msg, "success");
