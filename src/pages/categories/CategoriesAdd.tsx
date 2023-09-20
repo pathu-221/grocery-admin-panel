@@ -6,7 +6,7 @@ import { object, string } from "yup";
 import { uploadImage } from "../../helpers/uploadImage.helper";
 import showToast from "../../components/ShowToast";
 import { getImageUrl } from "../../helpers/getFileUrl.helper";
-import { addCategory } from "../../apis/categories.api";
+import { addCategory, editCategory } from "../../apis/categories.api";
 
 interface CategoriesAddProps {
 	category?: ICategory;
@@ -24,7 +24,9 @@ const CategoriesAdd: FC<CategoriesAddProps> = ({ category, onUpdate }) => {
 			image: string().required("Image is required"),
 		}),
 		onSubmit: async (values) => {
-			const response = await addCategory(values);
+			const response = category?.id
+				? await editCategory(values, category.id)
+				: await addCategory(values);
 			if (!response.status) return showToast(response.msg);
 			showToast(response.msg, "success");
 			onUpdate();

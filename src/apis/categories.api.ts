@@ -24,3 +24,14 @@ export async function addCategory(formData: any) {
 	});
 	return response;
 }
+
+export async function editCategory(formData: any, categoryId: string) {
+	const response = await requestWithToken(`admin/categories/${categoryId}`, {
+		method: "PUT",
+		headers: {
+			"content-type": "application/json",
+		},
+		body: JSON.stringify(formData),
+	});
+	return response;
+}
