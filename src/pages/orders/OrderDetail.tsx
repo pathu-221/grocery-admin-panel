@@ -38,12 +38,7 @@ const OrderDetailPage: FC<OrderDetailPageProps> = () => {
 					<Link to="">Order detail</Link>
 				</li>
 			</Subheader>
-			<ul className="steps w-full mt-3">
-				<li className="step step-primary">Register</li>
-				<li className="step step-primary">Choose plan</li>
-				<li className="step">Purchase</li>
-				<li className="step">Receive Product</li>
-			</ul>
+
 			<section className="card w-full bg-base-300 mt-2">
 				{order && (
 					<>
